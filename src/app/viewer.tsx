@@ -7,6 +7,7 @@ import {Card} from '../ui/Card'
 
 import {personTypes} from '../dataset/person-types'
 import {ThailandDatabase} from '../dataset/raw-database'
+import {keyframes} from '@emotion/core'
 
 const nationalIDMask = [
   /\d/,
@@ -69,20 +70,40 @@ function getAmphoeFromCode(code: number): string {
   return location.amphoe
 }
 
+const transitionIn = keyframes`
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+`
+
+const fadeIn = keyframes`
+  0% {
+    opacity: 0.3;
+  }
+
+  100% {
+    opacity: 1;
+  }
+`
+
 const MeaningCard = styled(Card)`
   text-align: left;
   margin: 2.5em 2em 0 2em;
   max-width: 800px;
+
+  animation: ${transitionIn} 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
 `
 
 const Clickable = styled.span`
   text-decoration: underline;
   color: #16a085;
   cursor: pointer;
-`
-
-const Highlight = styled.span`
-  color: #16a085;
 `
 
 const PersonTypeDesc = styled.div`
@@ -146,6 +167,8 @@ function getPersonInfoFromNationalID(id: string) {
 
 const Title = styled.h2`
   margin: 0.5em 0;
+
+  animation: ${fadeIn} 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
 `
 
 function ProvinceView({code, province}: {code: number; province: string}) {
