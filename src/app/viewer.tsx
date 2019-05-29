@@ -5,7 +5,6 @@ import styled from '@emotion/styled'
 
 import {Card} from '../ui/Card'
 
-import {isJSXNamespacedName} from '@babel/types'
 import {personTypes} from '../dataset/person-types'
 import {ThailandDatabase} from '../dataset/raw-database'
 
@@ -162,9 +161,13 @@ function ProvinceView({code, province}: {code: number; province: string}) {
 function AmphoeView({code, amphoe}: {code: number; amphoe: string}) {
   if (!amphoe) return null
 
+  const isBangkok = String(code).indexOf('10') === 0
+  const districtPrefix = isBangkok ? 'เขต' : 'อำเภอ'
+
   return (
     <Title>
-      หลักที่ 2-5 <Code>(เลข {code})</Code>: เกิดที่อำเภอ{amphoe}
+      หลักที่ 2-5 <Code>(เลข {code})</Code>: เกิดที่{districtPrefix}
+      {amphoe}
     </Title>
   )
 }
