@@ -378,5 +378,10 @@ export default [
     "thName": "อุบลราชธานี",
     "enName": "Ubon Ratchathani",
     "code": 34
+  },
+  {
+    "thName": "บึงกาฬ",
+    "enName": "Bueng Kan",
+    "code": 38
   }
 ]
