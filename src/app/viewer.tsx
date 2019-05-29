@@ -228,7 +228,7 @@ export function Viewer() {
         mask={nationalIDMask}
         value={id}
         onChange={e => setID(e.target.value)}
-        placeholder="1-2345-67890-12"
+        placeholder="1-2345-67890-12-3"
       />
 
       <Meaning text={id} />
