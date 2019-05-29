@@ -1,4 +1,6 @@
-# What does this Thailand National ID number mean?
+# เลขบัตรประชาชนนี้มีความหมายว่าอะไรกันนะ?
 
-Coming Soon...
+ค้นหาความหมายที่ซ่อนอยู่ในเลขบัตรประชาชนแบบง่ายๆ :sparkles:
+
+![Screenshot](docs/screenshot.png)
 
