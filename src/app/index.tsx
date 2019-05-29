@@ -2,9 +2,11 @@ import React from 'react'
 import styled from '@emotion/styled'
 
 import {Card} from '../ui/Card'
+import {Viewer} from './viewer'
 
 const Container = styled.div`
-  display: grid;
+  display: flex;
+  flex-direction: column;
   min-height: 100vh;
   width: 100%;
   text-align: center;
@@ -17,8 +19,8 @@ const Container = styled.div`
 
 export const App = () => (
   <Container>
-    <Card>
-      <h1>เลขบัตรประชาชนนี้มีความหมายว่าอะไร?</h1>
-    </Card>
+    <h1>เลขบัตรประชาชนนี้มีความหมายว่าอะไร?</h1>
+
+    <Viewer />
   </Container>
 )
