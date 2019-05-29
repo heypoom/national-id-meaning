@@ -5,9 +5,9 @@ import styled from '@emotion/styled'
 
 import {Card} from '../ui/Card'
 
-import countriesData from '../dataset/countries'
 import {isJSXNamespacedName} from '@babel/types'
 import {personTypes} from '../dataset/person-types'
+import {ThailandDatabase} from '../dataset/raw-database'
 
 const nationalIDMask = [
   /\d/,
@@ -44,17 +44,31 @@ const NumberInput = styled(MaskedInput)`
 
   color: #333;
   font-weight: bold;
-  font-family: 'FuraCode Nerd Font', 'Fira Mono', 'Sukhumvit Set', 'Kanit', sans-serif;
+  font-family: 'FuraCode Nerd Font', 'Fira Mono', 'Sukhumvit Set', 'Kanit',
+    sans-serif;
 `
 
-interface ProvinceData {
-  code: number,
-  thName: string,
-  enName: string
+export interface Location {
+  amphoe: string
+  province: string
+  zipcode: number
+  amphoe_code: number
+  province_code: number
 }
 
-const getProvinceFromCode = (code: number): ProvinceData =>
-  countriesData.find(x => x.code === code)
+function getProvinceFromCode(code: number): string {
+  const location = ThailandDatabase.find(x => x.province_code === code)
+  if (!location) return ''
+
+  return location.province
+}
+
+function getAmphoeFromCode(code: number): string {
+  const location = ThailandDatabase.find(x => x.amphoe_code === code)
+  if (!location) return ''
+
+  return location.amphoe
+}
 
 const MeaningCard = styled(Card)`
   text-align: left;
@@ -68,20 +82,33 @@ const Clickable = styled.span`
   cursor: pointer;
 `
 
-const Highlight  = styled.span`
+const Highlight = styled.span`
   color: #16a085;
 `
 
 const PersonTypeDesc = styled.div`
   color: #555;
-  margin-top: 5px;
-  margin-bottom: 30px;
+  margin-bottom: 10px;
 `
 
 const Code = styled.span`
   color: #555;
   font-size: 0.85em;
 `
+
+function validateThaiCitizenID(id: string) {
+  if (id.length != 13 || id.charAt(0).match(/[09]/)) return false
+
+  let sum = 0
+
+  for (let i = 0; i < 12; i++) {
+    sum += Number(id.charAt(i)) * (13 - i)
+  }
+
+  if ((11 - (sum % 11)) % 10 != Number(id.charAt(12))) return false
+
+  return true
+}
 
 // หลักที่ 1 หมายถึงประเภทของบุคคล
 // หลักที่ 2 และ 3 หมายถึงจังหวัดภูมิลำเนา
@@ -97,16 +124,59 @@ function getPersonInfoFromNationalID(id: string) {
   const provinceCode = Number(id.slice(1, 3))
   const province = getProvinceFromCode(provinceCode)
 
-  return {typeCode, typeDesc, province}
+  const amphoeCode = Number(id.slice(1, 5))
+  const amphoe = getAmphoeFromCode(amphoeCode)
+
+  const birthNumber = Number(id.slice(6, 10))
+  const personOrder = Number(id.slice(11, 12))
+
+  const isValid = validateThaiCitizenID(id)
+
+  return {
+    typeCode,
+    typeDesc,
+    provinceCode,
+    province,
+    amphoeCode,
+    amphoe,
+    birthNumber,
+    personOrder,
+    isValid,
+  }
 }
 
-function ProvinceView({province}: {province: ProvinceData}) {
+const Title = styled.h2`
+  margin: 0.5em 0;
+`
+
+function ProvinceView({code, province}: {code: number; province: string}) {
   if (!province) return null
 
   return (
-    <h2 title={province.enName}>
-      หลักที่ 2-3 <Code>(เลข {province.code})</Code>: เกิดที่จังหวัด{province.thName}
-    </h2>
+    <Title>
+      หลักที่ 2-3 <Code>(เลข {code})</Code>: เกิดที่จังหวัด{province}
+    </Title>
+  )
+}
+
+function AmphoeView({code, amphoe}: {code: number; amphoe: string}) {
+  if (!amphoe) return null
+
+  return (
+    <Title>
+      หลักที่ 2-5 <Code>(เลข {code})</Code>: เกิดที่อำเภอ{amphoe}
+    </Title>
+  )
+}
+
+function ValidityView({last, isValid}: {last: string; isValid: boolean}) {
+  if (!last) return null
+
+  return (
+    <Title style={{color: isValid ? '#16a085' : '#e74c3c'}}>
+      หลักที่ 13: (<Code>เลข {last}</Code>) เลขบัตรประจำตัว
+      {isValid ? 'ถูกต้อง' : 'ไม่ถูกต้อง'}
+    </Title>
   )
 }
 
@@ -118,19 +188,29 @@ export function Meaning({text}: {text: string}) {
   const toggleShowTypeDesc = () => setShowTypeDesc(!showTypeDesc)
 
   const id = text.replace(/[-_]/g, '')
-  const {typeCode, typeDesc, province} = getPersonInfoFromNationalID(id)
+  const {
+    typeCode,
+    typeDesc,
+    province,
+    provinceCode,
+    amphoe,
+    amphoeCode,
+    isValid,
+  } = getPersonInfoFromNationalID(id)
 
   return (
     <MeaningCard>
-      <h2
-        title={typeDesc}
-        onClick={toggleShowTypeDesc}>
+      <Title title={typeDesc} onClick={toggleShowTypeDesc}>
         หลักที่ 1: <Clickable>บุคคลประเภทที่ {typeCode}</Clickable>
-      </h2>
+      </Title>
 
       {showTypeDesc && <PersonTypeDesc>{typeDesc}</PersonTypeDesc>}
 
-      <ProvinceView province={province} />
+      <ProvinceView code={provinceCode} province={province} />
+
+      <AmphoeView code={amphoeCode} amphoe={amphoe} />
+
+      <ValidityView last={id[12]} isValid={isValid} />
     </MeaningCard>
   )
 }
