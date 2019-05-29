@@ -174,7 +174,7 @@ function ValidityView({last, isValid}: {last: string; isValid: boolean}) {
 
   return (
     <Title style={{color: isValid ? '#16a085' : '#e74c3c'}}>
-      หลักที่ 13: (<Code>เลข {last}</Code>) เลขบัตรประจำตัว
+      หลักที่ 13 <Code>(เลข {last})</Code>: เลขบัตรประจำตัว
       {isValid ? 'ถูกต้อง' : 'ไม่ถูกต้อง'}
     </Title>
   )
