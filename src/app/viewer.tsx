@@ -44,7 +44,7 @@ const NumberInput = styled(MaskedInput)`
 
   color: #333;
   font-weight: bold;
-  font-family: 'FuraCode Nerd Font', 'Sukhumvit Set', sans-serif;
+  font-family: 'FuraCode Nerd Font', 'Sukhumvit Set', 'Fira Mono', 'Kanit', sans-serif;
 `
 
 interface ProvinceData {
