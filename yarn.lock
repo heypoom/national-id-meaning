@@ -7026,10 +7026,10 @@ lru-cache@^5.1.1:
   dependencies:
     yallist "^3.0.2"
 
-luxon@^1.13.2:
-  version "1.13.2"
-  resolved "https://registry.yarnpkg.com/luxon/-/luxon-1.13.2.tgz#2866c7a7591441aea0004e8cf80d5ca6d917017a"
-  integrity sha512-U7i2AE+/VWeB8PZZkIeEcxJCZvBA8LegCHufaIFYx3qRQdw2UJw3fuaL/Fqi9Q+2MeFYu+gYqIzr5hWOvAMHBQ==
+luxon@^2.5.2:
+  version "2.5.2"
+  resolved "https://registry.yarnpkg.com/luxon/-/luxon-2.5.2.tgz#17ed497f0277e72d58a4756d6a9abee4681457b6"
+  integrity sha512-Yg7/RDp4nedqmLgyH0LwgGRvMEKVzKbUdkBYyCosbHgJ+kaOUx0qzSiSatVc3DFygnirTPYnMM2P5dg2uH1WvA==
 
 magic-string@^0.22.4:
   version "0.22.5"
